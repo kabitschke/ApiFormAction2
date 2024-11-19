@@ -1,8 +1,13 @@
 'use client'
 
 import adicionarProduto from "@/app/actions/adicionar-produto";
-import { Produto } from "@/app/products/actions";
 import React from "react";
+import { useFormStatus } from "react-dom";
+
+function Button() {
+  const status = useFormStatus();
+  return <button type="submit" disabled={status.pending}>Adicionar</button>
+}
 
 export default function ADD() {
 
@@ -12,34 +17,20 @@ export default function ADD() {
   const [estoque, setEstoque] = React.useState('');
   const [importado, setImportado] = React.useState('');
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
 
-    // Cria o objeto do produto com os valores convertidos
-    const novoProduto: Produto = {
-      nome,
-      descricao,
-      preco: parseFloat(preco),
-      estoque: parseInt(estoque),
-      importado: importado === '1' ? 1 : 0,//1 significa importado 0 nacional
-    };
-
-    await adicionarProduto(novoProduto);
-
-
-  }
 
   return (
     <div>
       <h1>Adicionar Produto</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form action={adicionarProduto}>
         <label htmlFor="nome">Nome:</label>
         <input
           id="nome"
           type="text"
           value={nome}
           onChange={e => setNome(e.target.value)}
+          name="nome"
         />
 
         <label htmlFor="descricao">Descrição:</label>
@@ -48,6 +39,7 @@ export default function ADD() {
           type="text"
           value={descricao}
           onChange={e => setDescricao(e.target.value)}
+          name="descricao"
         />
 
         <label htmlFor="preco">Preço:</label>
@@ -56,6 +48,7 @@ export default function ADD() {
           type="text"
           value={preco}
           onChange={e => setPreco(e.target.value)}
+          name="preco"
         />
 
         <label htmlFor="estoque">Estoque:</label>
@@ -64,6 +57,7 @@ export default function ADD() {
           type="text"
           value={estoque}
           onChange={e => setEstoque(e.target.value)}
+          name="estoque"
         />
 
         <label htmlFor="importado">Importado:</label>
@@ -72,9 +66,10 @@ export default function ADD() {
           type="text"
           value={importado}
           onChange={e => setImportado(e.target.value)}
+          name="importado"
         />
 
-        <button type='submit'>Adicionar</button>
+        <Button/>
       </form>
 
     </div>

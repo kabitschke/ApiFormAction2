@@ -1,5 +1,5 @@
-type Produto = {
-  id: number;
+export type Produto = {
+  id?: number;
   nome: string;
   preco: number;
   descricao: string;
