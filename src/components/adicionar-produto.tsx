@@ -2,14 +2,21 @@
 
 import adicionarProduto from "@/app/actions/adicionar-produto";
 import React from "react";
-import { useFormStatus } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 
 function Button() {
   const status = useFormStatus();
   return <button type="submit" disabled={status.pending}>Adicionar</button>
 }
 
+
+
+
 export default function ADD() {
+
+  const [state, formAction] = useFormState(adicionarProduto, {
+    errors: [],
+  });
 
   const [nome, setNome] = React.useState('');
   const [descricao, setDescricao] = React.useState('');
@@ -23,7 +30,7 @@ export default function ADD() {
     <div>
       <h1>Adicionar Produto</h1>
 
-      <form action={adicionarProduto}>
+      <form action={formAction}>
         <label htmlFor="nome">Nome:</label>
         <input
           id="nome"
@@ -68,8 +75,12 @@ export default function ADD() {
           onChange={e => setImportado(e.target.value)}
           name="importado"
         />
-
-        <Button/>
+        {
+          state.errors.map((error, i) => (
+            <p key={i} style={{ color: 'red' }}>{error}</p>
+          ))
+        }
+        <Button />
       </form>
 
     </div>
